@@ -166,6 +166,13 @@ classify:
     
     lw t0, 0(s3)
     lw t1, 0(s8)
+
+    mv t2, t0
+    mv t3, t1
+
+
+    jal ra mul
+    mv a0, t4
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
     slli a0, a0, 2
     jal malloc 
@@ -203,6 +210,12 @@ classify:
     mv a0, s9 # move h to the first argument
     lw t0, 0(s3)
     lw t1, 0(s8)
+
+    mv t2, t0
+    mv t3, t1
+
+    jal ra mul
+    mv a1, t4
     # mul a1, t0, t1 # length of h array and set it as second argument
     # FIXME: Replace 'mul' with your own implementation
     
@@ -226,6 +239,12 @@ classify:
     
     lw t0, 0(s3)
     lw t1, 0(s6)
+
+    mv t2, t0
+    mv t3, t1
+
+    jal ra mul
+    mv a0, t4
     # mul a0, t0, t1 # FIXME: Replace 'mul' with your own implementation
     slli a0, a0, 2
     jal malloc 
@@ -286,7 +305,13 @@ classify:
     mv a0, s10 # load o array into first arg
     lw t0, 0(s3)
     lw t1, 0(s6)
-    mul a1, t0, t1 # load length of array into second arg
+
+    mv t2, t0
+    mv t3, t1
+
+    jal ra mul
+    mv a1, t4
+    # mul a1, t0, t1 # load length of array into second arg
     # FIXME: Replace 'mul' with your own implementation
     
     jal argmax
@@ -384,3 +409,23 @@ error_args:
 error_malloc:
     li a0, 26
     j exit
+
+
+# t2*t3 = t4
+# t5
+mul:
+    li t4, 0
+mloop_start:
+    beq x0, t2, mloop_end
+    andi t5, t2, 1
+
+    beq t5, x0, mExit
+    add t4, t4, t3
+mExit:
+    slli t3, t3, 1
+    srli t2, t2, 1
+    j mloop_start
+    
+mloop_end:
+
+    jr ra
