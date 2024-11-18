@@ -62,6 +62,7 @@ write_matrix:
     bne a0, t0, fwrite_error
 
     # mul s4, s2, s3   # s4 = total elements
+    jal ra mul
     # FIXME: Replace 'mul' with your own implementation
 
     # write matrix data to file
@@ -113,3 +114,35 @@ error_exit:
     lw s4, 20(sp)
     addi sp, sp, 44
     j exit
+
+
+# s2 * s3 = s4
+mul:
+    xor t6, s2, s3         
+    srli t6, t6, 31        
+    li s4, 0              
+
+    bge s2, x0, Pos1       
+    sub s2, x0, s2        
+Pos1:
+    bge s3, x0, mloop_start 
+    sub s3, x0, s3         
+
+mloop_start:
+    beq x0, s2, mloop_end  
+    andi t5, s2, 1         
+
+    beq t5, x0, mExit      
+    add s4, s4, s3        
+
+mExit:
+    slli s3, s3, 1      
+    srli s2, s2, 1     
+    j mloop_start        
+
+mloop_end:
+    beq t6, x0, end_mul    
+    sub s4, x0, s4        
+
+end_mul:
+    jr ra             
