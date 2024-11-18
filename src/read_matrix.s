@@ -74,6 +74,8 @@ read_matrix:
     sw t1, 0(s3)     # saves num rows
     sw t2, 0(s4)     # saves num cols
 
+    jal ra mul 
+    mv s1, t4
     # mul s1, t1, t2   # s1 is number of elements
     # FIXME: Replace 'mul' with your own implementation
 
@@ -143,3 +145,32 @@ error_exit:
     lw s4, 20(sp)
     addi sp, sp, 40
     j exit
+
+# t2 * t1 = t4
+mul:
+    xor t6, t2, t1
+    srli t6, t6, 31
+    li t4, 0
+
+    bge t2, x0, Pos1
+    sub t2, x0, t2
+Pos1:
+    bge t1, x0, mloop_start
+    sub t1, x0, t1
+
+mloop_start:
+    beq x0, t2, mloop_end
+    andi t5, t2, 1
+
+    beq t5, x0, mExit
+    add t4, t4, t1
+mExit:
+    slli t1, t1, 1
+    srli t2, t2, 1
+    j mloop_start
+    
+mloop_end:
+    beq t6, x0, end_mul
+    sub t4, x0, t4
+end_mul:
+    jr ra
