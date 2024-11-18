@@ -29,12 +29,14 @@ argmax:
 
     li t1, 0
     li t2, 1
+    addi sp, sp, -4
+    sw a0 0(sp)
 loop_start:
     # TODO: Add your own implementation
     bge t1, a1, loop_end
     addi t1, t1, 1
 
-    addi a0, a0, 1
+    addi a0, a0, 4
     lw t2, 0(a0)
 
     bge t0, t2, loop_start
@@ -43,6 +45,8 @@ loop_start:
     
     j loop_start
 loop_end:
+    lw a0, 0(sp)
+    addi sp, sp, 4
     sw t0, 0(a0)
     j exit
 
