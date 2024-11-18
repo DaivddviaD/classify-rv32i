@@ -32,14 +32,31 @@ dot:
     blt a4, t0, error_terminate  
 
     li t0, 0            
-    li t1, 0         
-
+    li t1, 0 
+    slli a3, a3, 2
+    slli a4, a4, 2
+        
 loop_start:
     bge t1, a2, loop_end
     # TODO: Add your own implementation
 
+    lw t2, 0(a0)
+    lw t3, 0(a1)
+    addi sp, sp, -4
+    sw ra, 0(sp)
+    jal ra mul
+    lw ra, 0(sp)
+    addi sp, sp, 4
+    add t0, t0, t4
+
+    add a0, a0, a3
+    add a1, a1, a4
+
+    addi t1, t1, 1
+    j loop_start
 loop_end:
     mv a0, t0
+
     jr ra
 
 error_terminate:
@@ -50,3 +67,36 @@ error_terminate:
 set_error_36:
     li a0, 36
     j exit
+
+
+
+# t2 * t3 = t4
+mul:
+
+
+    xor t6, t2, t3
+    srli t6, t6, 31
+    li t4, 0
+
+    bge t2, x0, Pos1
+    sub t2, x0, t2
+Pos1:
+    bge t3, x0, mloop_start
+    sub t3, x0, t3
+
+mloop_start:
+    beq x0, t2, mloop_end
+    andi t5, t2, 1
+
+    beq t5, x0, mExit
+    add t4, t4, t3
+mExit:
+    slli t3, t3, 1
+    srli t2, t2, 1
+    j mloop_start
+    
+mloop_end:
+    beq t6, x0, end_mul
+    sub t4, x0, t4
+end_mul:
+    jr ra
