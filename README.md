@@ -96,18 +96,18 @@ outer_loop_end:
 The inner loop calls the dot function to calculate the dot product of the M0 row and M1 column.
 It then stores the result into the target address of the result matrix D.
 If 's1' equals 'a5', it finishes the inner loop and moves to the next row of M0.
-
-inner_loop_start:
 '''
-# HELPER FUNCTION: Dot product of 2 int arrays
-# Arguments:
-#   a0 (int*) is the pointer to the start of arr0
-#   a1 (int*) is the pointer to the start of arr1
-#   a2 (int)  is the number of elements to use = number of columns of A, or number of rows of B
-#   a3 (int)  is the stride of arr0 = for A, stride = 1
-#   a4 (int)  is the stride of arr1 = for B, stride = len(rows) - 1
-# Returns:
-#   a0 (int)  is the dot product of arr0 and arr1
+inner_loop_start:
+
+    # HELPER FUNCTION: Dot product of 2 int arrays
+    # Arguments:
+    #   a0 (int*) is the pointer to the start of arr0
+    #   a1 (int*) is the pointer to the start of arr1
+    #   a2 (int)  is the number of elements to use = number of columns of A, or number of rows of B
+    #   a3 (int)  is the stride of arr0 = for A, stride = 1
+    #   a4 (int)  is the stride of arr1 = for B, stride = len(rows) - 1
+    # Returns:
+    #   a0 (int)  is the dot product of arr0 and arr1
     beq s1, a5, inner_loop_end
 
     addi sp, sp, -24
