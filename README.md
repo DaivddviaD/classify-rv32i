@@ -96,66 +96,7 @@ outer_loop_end:
 The inner loop calls the dot function to calculate the dot product of the M0 row and M1 column.
 It then stores the result into the target address of the result matrix D.
 If 's1' equals 'a5', it finishes the inner loop and moves to the next row of M0.
-'''
-inner_loop_start:
 
-    # HELPER FUNCTION: Dot product of 2 int arrays
-    # Arguments:
-    #   a0 (int*) is the pointer to the start of arr0
-    #   a1 (int*) is the pointer to the start of arr1
-    #   a2 (int)  is the number of elements to use = number of columns of A, or number of rows of B
-    #   a3 (int)  is the stride of arr0 = for A, stride = 1
-    #   a4 (int)  is the stride of arr1 = for B, stride = len(rows) - 1
-    # Returns:
-    #   a0 (int)  is the dot product of arr0 and arr1
-    beq s1, a5, inner_loop_end
-
-    addi sp, sp, -24
-    sw a0, 0(sp)
-    sw a1, 4(sp)
-    sw a2, 8(sp)
-    sw a3, 12(sp)
-    sw a4, 16(sp)
-    sw a5, 20(sp)
-    
-    mv a0, s3 # set pointer for matrix A
-    mv a1, s4 # set pointer for matrix B
-    mv a2, a2 # set number of elements to the columns of A
-    li a3, 1 # stride for matrix A
-    mv a4, a5 # stride for matrix B
-    
-    jal dot
-    
-    mv t0, a0 # store result of dot product in t0
-    
-    lw a0, 0(sp)
-    lw a1, 4(sp)
-    lw a2, 8(sp)
-    lw a3, 12(sp)
-    lw a4, 16(sp)
-    lw a5, 20(sp)
-    addi sp, sp, 24
-    
-    sw t0, 0(s2)
-    addi s2, s2, 4 # increment result matrix pointer
-    
-    li t1, 4
-    add s4, s4, t1 # increment column pointer for Matrix B
-    
-    addi s1, s1, 1
-    j inner_loop_start
-    
-inner_loop_end:
-    # TODO: Add your own implementation
-    
-    slli t0, a2, 2      # t0 = a2 * 4
-
-    add s3, s3, t0      # move to next row in matrix A
-    
-    addi s0, s0, 1      # increment outer loop counter
-
-    j outer_loop_start
-'''
 #### Error Conditions
  1. Validates M0: Ensures positive dimensions.
  2. Validates M1: Ensures positive dimensions.
