@@ -29,7 +29,7 @@ The algorithm:
 2. If it is, add the current multiplicand to the result.
 3. Then shift the multiplicand left by 1 bit and the multiplier right by 1 bit.
 The loop continues until the multiplier becomes zero.
-'''
+```
 mul:
     xor t6, t2, t1
     srli t6, t6, 31
@@ -57,7 +57,7 @@ mloop_end:
     sub t4, x0, t4
 end_mul:
     jr ra
-'''
+```
 The dot function calculates the dot product of two arrays with strides.
 It returns the result of the dot product.
 
@@ -72,7 +72,8 @@ The outer loop iterates through each row of the M0 matrix.
 's4' points to the first column of M1.
 If 's0' is less than 'a1', the inner loop is called to perform matrix multiplication.
 Otherwise, the matmul function finishes.
-'''
+
+```
 inner_loop_end:
     # TODO: Add your own implementation
     slli t0, a2, 2
@@ -92,7 +93,8 @@ outer_loop_end:
     addi sp, sp, 28
     jr ra
     ret
-'''
+```
+
 The inner loop calls the dot function to calculate the dot product of the M0 row and M1 column.
 It then stores the result into the target address of the result matrix D.
 If 's1' equals 'a5', it finishes the inner loop and moves to the next row of M0.
@@ -134,7 +136,7 @@ The write_matrix function includes:
 ### classify.s
 
  The classify function includes:
- 1. Read two weight matrices (M0, M1) and the input matrix using read_matrix.
+1. Read two weight matrices (M0, M1) and the input matrix using read_matrix.
 2. Compute intermediate matrix h = matmul(m0, input) using matmul.
 3. Compute ReLU(h) using relu.
 4. Compute output matrix o = matmul(m1, h) using matmul.
@@ -144,5 +146,6 @@ The write_matrix function includes:
 
 
 #### Error Conditions
-31 - Invalid argument count
-26 - Memory allocation failure
+ 31 - Invalid argument count
+ 
+ 26 - Memory allocation failure
